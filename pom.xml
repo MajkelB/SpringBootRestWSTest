@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!--    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.1.RELEASE</version>
+        <relativePath/>  lookup parent from repository 
+    </parent>-->
+    <!-- WLS management http://middlewaremagic.com/weblogic/?p=8217 -->
+    <!-- https://programmaticponderings.com/tag/weblogic-maven-plugin/ -->
+    
+    <parent>
+        <groupId>io.spring.platform</groupId>
+        <artifactId>platform-bom</artifactId>
+        <version>2.0.3.RELEASE</version>
+    </parent>
+    
+    <groupId>mb.test</groupId>
+    <artifactId>RestSpringBootTest</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+    <name>Products</name>
+    <description>Demo project for Spring Boot RestWS</description>
+
+    <properties>
+        <java.version>1.7</java.version>
+        <spring.version>4.3.1.RELEASE</spring.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <fileFinalName>Products</fileFinalName>
+        
+        
+        <weblogic.middlewareHome>C:\\Programy\\Oracle\\Middleware</weblogic.middlewareHome>
+        <weblogic.serverUrl>t3://localhost:7001</weblogic.serverUrl>
+        <weblogic.serverName>AdminServer</weblogic.serverName>
+        <weblogic.user>weblogic</weblogic.user> 
+        <weblogic.password>weblogic1</weblogic.password>
+
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/libs-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>maven.oracle.com</id>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <url>https://maven.oracle.com</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven.oracle.com</id>
+            <url>https://maven.oracle.com</url>
+        </pluginRepository>
+    </pluginRepositories>    
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>tomcat-embed-el</artifactId>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+<!--        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>tomcat-embed-el</artifactId>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+</dependencies>
+
+    <build>
+        <finalName>${fileFinalName}</finalName>
+        <plugins>
+<!--            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>false</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                    <warName>SpringRest2</warName>
+                </configuration>
+            </plugin>-->
+            
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.oracle.weblogic</groupId> 
+                <artifactId>wls-maven-plugin</artifactId> 
+                <version>12.1.1.0</version> 
+                <configuration> 
+                    <middlewareHome>${weblogic.middlewareHome}</middlewareHome>
+                    <adminurl>${weblogic.serverUrl}</adminurl>
+                    <user>${weblogic.user}</user> 
+                    <password>${weblogic.password}</password>
+                    <upload>true</upload>
+                    <!--<source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>-->
+                    <targets>${weblogic.serverName}</targets>
+                    <verbose>true</verbose> 
+                    <name>${project.build.finalName}</name>
+                </configuration>
+            </plugin>              
+            
+            
+            <!--            <plugin>
+                 This is the configuration for the weblogic-maven-plugin 
+                <groupId>com.oracle.weblogic</groupId>
+                <artifactId>wls-maven-plugin</artifactId>
+                <version>12.1.1.0</version>
+                <configuration>
+                    <middlewareHome>C:\\Programy\\Oracle\\Middleware\\wlserver_12.1</middlewareHome>
+                </configuration>
+                <executions>
+                     Execute the appc goal during the package phase 
+                    <execution>
+                        <id>wls-appc</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>appc</goal>
+                        </goals>
+                        <configuration>
+                            <source>${project.build.directory}/${project.name}.${project.packaging}</source>
+                        </configuration>
+                    </execution>
+                     Deploy the application to the WebLogic Server in the pre-integration-test phase 
+                    <execution>
+                        <id>wls-deploy</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                        <configuration>
+                            The admin URL where the app is deployed. Here use the plugin's default value t3://localhost:7001 
+                            <adminurl>t3://localhost:7001</adminurl>
+                            <user>weblogic</user>
+                            <password>ehrahasialah!</password>
+                            The location of the file or directory to be deployed 
+                            <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+                            The target servers where the application is deployed. Here use the plugin's default value AdminServer 
+                            <targets>AdminServer</targets>
+                            <verbose>true</verbose>
+                            <name>${project.build.finalName}</name>
+                        </configuration>
+                    </execution>
+                     Stop the application in the pre-integration-test phase 
+                    <execution>
+                        <id>wls-stop-app</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>stop-app</goal>
+                        </goals>
+                        <configuration>
+                            <adminurl>t3://127.0.0.1:7001</adminurl>
+                            <user>weblogic</user>
+                            <password>password</password>
+                            <name>${project.build.finalName}</name>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>            -->
+            
+            
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Redeploy at localhost:7001</actionName>
+            <displayName>Redeploy at localhost:7001</displayName>
+            <goals>
+                <goal>clean</goal>
+                <goal>package</goal>
+                <goal>wls:deploy</goal>
+                <goal>-Dmaven.test.skip=true</goal>
+            </goals>
+        </action>
+    </actions>

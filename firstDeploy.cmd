@@ -1,0 +1,1 @@
+mvn clean package wls:deploy -Dmaven.test.skip=true
